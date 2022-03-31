@@ -50,6 +50,7 @@ jQuery(function($){
             var id = $(".canvas-list.selected").find('.gallery-canvas-text').attr('id');
             var canvas = document.getElementById(id);
             var ctx = canvas.getContext("2d");
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
             ctx.fillStyle = "white";
             ctx.textBaseline = 'middle';
             ctx.font = "20px 'Montserrat'";
@@ -59,6 +60,7 @@ jQuery(function($){
     }
 
     $('body').on('click', '#gallery-wrapper .canvas-list', function () {
+        $("#name").val("");
         $(".canvas-list").removeClass("selected");
         $(this).addClass("selected");
         DynamicText();

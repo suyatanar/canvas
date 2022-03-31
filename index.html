@@ -13,7 +13,11 @@
   <h1>Upload images on canvas</h1>
   <div class="page-wrap">
     <div class="controls">
-      <input class="controls__input" type="file" id="imageLoader" name="imageLoader" multiple/>
+      <!-- <input class="controls__input" type="file" id="imageLoader" name="imageLoader" multiple/> -->
+      <label class="custom-file-upload">
+        <input type="file" id="imageLoader" name="imageLoader" multiple/>
+        Upload New Image
+      </label>
       <label class="controls__label" for="name">First, choose an image.</label>
 
       <input class="controls__input" id="name" type="text" value="" placeholder="Select the image to write the text" />
