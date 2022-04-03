@@ -83,8 +83,8 @@ jQuery(function($){
         var ctx = canvas.getContext("2d");
         //ctx.clearRect(0, 0, canvas.width, canvas.height);
         ctx.fillStyle = "white";
-        ctx.textBaseline = 'middle';
-        ctx.font = "20px 'Montserrat'";
+        //ctx.textBaseline = 'middle';
+        ctx.font = "30px 'Lato'";
         text_title = document.getElementById("name").value;           
         ctx.fillText(text_title, x, y);
     }

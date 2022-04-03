@@ -1,3 +1,10 @@
+@font-face {
+  font-family: Lato;
+  src: url(Lato-Regular.ttf);
+}
+body, h1, h2, h3, p, div, button{
+  font-family: Lato;
+}
 body {
   background: #222;
   color: #fff;
