@@ -2,63 +2,99 @@ jQuery(function($){
     var text_title ="Overlay text";
     let canvas_x = 0;
     let canvas_y = 0;
-    $('#imageLoader').on('change', function() {        
-        imagesPreview(this);
+    var pagination = "";
+    var back = "";
+    var next = "";
+    var file = [];
+    var timer = null;
+    var filesAmount = 0;
+
+    $('#imageLoader').on('change', function(e) { 
+        $(".canvas-list").remove();  
+        $(".images-list .image-name").each(function(){
+            $(this).remove();
+        }); 
+        current_file = e.target.files;
+        file = Array.from(file).concat(Array.from(current_file));
+        imagesPreview(file);
     });
 
-    var imagesPreview = function(input) {
-        var j = 1;
+    var imagesPreview = function(file) {
         var img = "";
         var src = "";
         var x = 0;
-        var y = 0;
-        if (input.files) {
-            var filesAmount = input.files.length;
-            for (i = 0; i < filesAmount; i++) {
-                var reader = new FileReader();
+        var y = 0;        
+        var j = 0;
+        if (file) {
+            //for(let x in file){
 
-                reader.onload = function(event) {
-                   $('.gallery-wrapper').removeClass("hidden");
-                    
-                    img = new Image();
-                    img.src = event.target.result;
-                    src = event.target.result;
-                    
-                    img.onload = function(e) {
-                        var current_img = e.currentTarget;
+                filesAmount = file.length;
 
-                        $('#gallery-wrapper').append('<div class="canvas-list"><canvas id="gallery-canvas-' + j +'" class="gallery-canvas"></canvas><button id="delete-canvas">Delete</button></div>');
+                $(".pagination-list").empty();
+                if(filesAmount > 1){
+                    next = '<span id="next-btn">Next</span>';                    
+                }
 
-                        var canvas = document.getElementById("gallery-canvas-" + j);
-                        var ctx = canvas.getContext("2d");
+                pagination = back + '1 of ' + filesAmount + next;
+                $(".pagination-list").append(pagination);
 
-                        canvas.width = current_img.width;
-                        canvas.height = current_img.height;
-                        ctx.drawImage(current_img,x,y);
-                        j++;
+                for (i = 0; i < filesAmount; i++) {
 
+                    if(file[i] === undefined) {
+                        continue;
                     }
 
+                    filename = file[i].name;
+                    $(".images-list").append('<div data-image-id="'+ i +'" class="image-name">'+ filename +' <button id="delete-canvas">Delete</button></div>');
+
+                    var reader = new FileReader();
+
+                    reader.onload = function(event) {
+                       $('.gallery-wrapper').removeClass("hidden");
+                        
+                        img = new Image();
+                        img.src = event.target.result;
+                        src = event.target.result;
+                        
+                        img.onload = function(e) {
+                            var current_img = e.currentTarget;
+
+                            if(j == 0){
+                                $('#gallery-wrapper').append('<div class="canvas-list selected" id="image-'+j+'"><canvas id="gallery-canvas-' + j +'" class="gallery-canvas"></canvas></div>');
+                            }else{
+                                $('#gallery-wrapper').append('<div class="canvas-list" id="image-'+j+'"><canvas id="gallery-canvas-' + j +'" class="gallery-canvas"></canvas></div>');
+                            }
+
+                            
+
+                            var canvas = document.getElementById("gallery-canvas-" + j);
+                            var ctx = canvas.getContext("2d");
+
+                            canvas.width = current_img.width;
+                            canvas.height = current_img.height;
+                            ctx.drawImage(current_img,x,y);
+                            j++;
+
+                        }
+
+                    }
+                    reader.readAsDataURL(file[i]);
                 }
-                reader.readAsDataURL(input.files[i]);
-            }
+            //}
         }
 
     };
 
-    function DynamicText(x, y) {
-        //$( "#name" ).keyup(function() {            
-            var id = $(".canvas-list.selected").find('.gallery-canvas').attr('id');
-            var canvas = document.getElementById(id);
-            var ctx = canvas.getContext("2d");
-            //ctx.clearRect(0, 0, canvas.width, canvas.height);
-            ctx.fillStyle = "white";
-            ctx.textBaseline = 'middle';
-            ctx.font = "20px 'Montserrat'";
-            text_title = document.getElementById("name").value;           
-            ctx.fillText(text_title, x, y);
-
-        //});
+    function DynamicText(x, y) {         
+        var id = $(".canvas-list.selected").find('.gallery-canvas').attr('id');
+        var canvas = document.getElementById(id);
+        var ctx = canvas.getContext("2d");
+        //ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.fillStyle = "white";
+        ctx.textBaseline = 'middle';
+        ctx.font = "20px 'Montserrat'";
+        text_title = document.getElementById("name").value;           
+        ctx.fillText(text_title, x, y);
     }
 
     $('body').on('click', '#gallery-wrapper .canvas-list', function (e) {
@@ -79,35 +115,92 @@ jQuery(function($){
         el.css("top", y);
 
         $( "#name" ).keyup(function() {
-
+            clearTimeout(timer); 
+            timer = setTimeout(hideTextBox, 1000);
             DynamicText(canvas_x, canvas_y);
-
         });
-
-        console.log("done");
-        //DynamicText(x, y);
     });
 
-    $('body').on('click', '#gallery-wrapper #delete-canvas', function () {
-        $(this).parents('.canvas-list').remove();
+    $('body').on('click', '.pagination-list #next-btn', function () {
+        var current_img = $(".canvas-list.selected").attr("id");
+        $(".canvas-list").removeClass("selected");
+        $(".canvas-list#" + current_img).next().addClass("selected");
+
+        $(".pagination-list").empty();
+        var next_img = $(".canvas-list#" + current_img).next().attr('id');
+        next_img = parseInt(next_img.replace("image-", "")) + 1;
+
+        if(filesAmount > 1){
+            back = '<span id="back-btn">Back</span>';                              
+        }
+        next = '<span id="next-btn">Next</span>';  
+        if(next_img == (filesAmount)){
+            next = '';  
+        }
+
+        pagination = back + next_img + ' of ' + filesAmount + next;
+        $(".pagination-list").append(pagination);
     });
 
-    $(".delete-btn").click(function(){
+    $('body').on('click', '.pagination-list #back-btn', function () {
+        var current_img = $(".canvas-list.selected").attr("id");
+        $(".canvas-list").removeClass("selected");
+        $(".canvas-list#" + current_img).prev().addClass("selected");
+
+        $(".pagination-list").empty();
+        var prev_img = $(".canvas-list#" + current_img).prev().attr('id');
+        prev_img = parseInt(prev_img.replace("image-", "")) + 1;
+
+        if(filesAmount > 1){
+            next = '<span id="next-btn">Next</span>';                                      
+        }
+        back = '<span id="back-btn">Back</span>';      
+        if(prev_img == 1){
+            back = '';  
+        }
+
+        pagination = back + prev_img + ' of ' + filesAmount + next;
+        $(".pagination-list").append(pagination);
+    });
+
+    function hideTextBox(){
+        $("#input-text-wrapper").addClass("hidden");
+    }
+
+    $('body').on('click', '.image-name #delete-canvas', function () {
+        var canvas_id = $(this).parent('.image-name').attr('data-image-id');
+        $(this).parent('.image-name').remove();
+        $(".canvas-list#image-" + canvas_id).remove();
+
+        delete file[canvas_id];
+    });
+
+    function resetCanvas(){
         $( ".canvas-list" ).each(function() {
             var canvas =  document.getElementById($(this).find(".gallery-canvas").attr('id'));
             var ctx = canvas.getContext("2d");
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             $(this).remove();
+        });        
+    }
+
+    function clearAlltag(){
+        $(".images-list .image-name").each(function(){
+            $(this).remove();
         });
-        imagesPreview(document.getElementById("imageLoader"));
+    }
+
+    $(".clear-all-tag").click(function(){
+        resetCanvas();
+        clearAlltag();
+        imagesPreview(file);
     });
 
     function handleImage(e) {
     	var filePath = $('#imageLoader').val();
     	var reader = new FileReader();
         reader.onload = function (event) {
-            img = new Image();
-            console.log(img);		
+            img = new Image();	
 
 			img.onload = function() {
                 canvas.width = img.width;

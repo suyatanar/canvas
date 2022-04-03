@@ -83,18 +83,28 @@ canvas.show {
   position: relative;
 }
 .gallery-wrapper .canvas-list{
-  width: 33.3%;
+  width: 100%;
   padding: 10px;
   position: relative;
+  display: none;
+}
+.gallery-wrapper .canvas-list.selected{
+  display: block;
 }
 .gallery-wrapper .canvas-list .gallery-canvas {
   width: 100%;
 }
 .gallery-canvas-text {
   position: absolute;
- /* left: 0;
-  top: 25px;*/
 }
 .hidden{
   display: none;
+}
+.pagination-list {
+  padding: 10px;
+  display: inline-block;
+}
+.pagination-list #back-btn, .pagination-list #next-btn{
+  padding: 10px;
+  cursor: pointer;
 }
