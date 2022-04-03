@@ -168,6 +168,9 @@ jQuery(function($){
         if(file.length == 1){
             $(".canvas-list").addClass("selected");
         }
+        if(file.length == 0){
+            $(".pagination-list").empty();
+        }
 
     });
 
