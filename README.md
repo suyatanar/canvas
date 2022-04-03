@@ -1,5 +1,3 @@
-Upload images on canvas
-----
 This is a pure javascript and jquery canvas application and all of the data are stored on the browser only.
 
 How to use?
