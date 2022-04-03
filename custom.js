@@ -1,5 +1,7 @@
 jQuery(function($){
     var text_title ="Overlay text";
+    let canvas_x = 0;
+    let canvas_y = 0;
     $('#imageLoader').on('change', function() {
         
         imagesPreview(this);
@@ -45,25 +47,49 @@ jQuery(function($){
 
     };
 
-    function DynamicText() {
-        $( "#name" ).keyup(function() {
-            var id = $(".canvas-list.selected").find('.gallery-canvas-text').attr('id');
+    function DynamicText(x, y) {
+        //$( "#name" ).keyup(function() {            
+            var id = $(".canvas-list.selected").find('.gallery-canvas').attr('id');
             var canvas = document.getElementById(id);
             var ctx = canvas.getContext("2d");
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            //ctx.clearRect(0, 0, canvas.width, canvas.height);
             ctx.fillStyle = "white";
             ctx.textBaseline = 'middle';
             ctx.font = "20px 'Montserrat'";
-            text_title = this.value;
-            ctx.fillText(text_title, 50, 50);
-        });
+            text_title = document.getElementById("name").value;           
+            ctx.fillText(text_title, x, y);
+
+        //});
     }
 
-    $('body').on('click', '#gallery-wrapper .canvas-list', function () {
+    $('body').on('click', '#gallery-wrapper .canvas-list', function (e) {
+
+        
+
         $("#name").val("");
         $(".canvas-list").removeClass("selected");
         $(this).addClass("selected");
-        DynamicText();
+
+        var offset = $(this).offset();
+        canvas_x = e.pageX - offset.left;
+        canvas_y = e.pageY - offset.top;
+
+        $("#input-text-wrapper").removeClass("hidden");
+        var x = e.pageX;
+        var y = e.pageY;
+        var el = $("#input-text-wrapper");
+        el.css('position', 'absolute');
+        el.css("left", x);
+        el.css("top", y);
+
+        $( "#name" ).keyup(function() {
+
+            DynamicText(canvas_x, canvas_y);
+
+        });
+
+        console.log("done");
+        //DynamicText(x, y);
     });
 
     $('body').on('click', '#gallery-wrapper #delete-canvas', function () {

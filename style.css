@@ -51,6 +51,10 @@ input[type="file"] {
   cursor: pointer;
 }
 
+.input-text, #input-text-wrapper{
+  z-index: 222;
+}
+
 /*canvas {
   background-color: #eee;
   transition: opacity 0.3s;
@@ -79,17 +83,17 @@ canvas.show {
   position: relative;
 }
 .gallery-wrapper .canvas-list{
-  width: 33.3%;
+  /*width: 33.3%;*/
   padding: 10px;
   position: relative;
 }
-.gallery-wrapper .canvas-list canvas {
+.gallery-wrapper .canvas-list .gallery-canvas {
   width: 100%;
 }
 .gallery-canvas-text {
   position: absolute;
-  left: 0;
-  top: 25px;
+ /* left: 0;
+  top: 25px;*/
 }
 .hidden{
   display: none;
