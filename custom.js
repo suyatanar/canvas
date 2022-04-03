@@ -2,8 +2,7 @@ jQuery(function($){
     var text_title ="Overlay text";
     let canvas_x = 0;
     let canvas_y = 0;
-    $('#imageLoader').on('change', function() {
-        
+    $('#imageLoader').on('change', function() {        
         imagesPreview(this);
     });
 
@@ -28,7 +27,7 @@ jQuery(function($){
                     img.onload = function(e) {
                         var current_img = e.currentTarget;
 
-                        $('#gallery-wrapper').append('<div class="canvas-list"><canvas id="gallery-canvas-' + j +'" class="gallery-canvas"></canvas><canvas id="gallery-text-' + j +'" class="gallery-canvas-text"></canvas><button id="delete-canvas">Delete</button></div>');
+                        $('#gallery-wrapper').append('<div class="canvas-list"><canvas id="gallery-canvas-' + j +'" class="gallery-canvas"></canvas><button id="delete-canvas">Delete</button></div>');
 
                         var canvas = document.getElementById("gallery-canvas-" + j);
                         var ctx = canvas.getContext("2d");
@@ -63,9 +62,6 @@ jQuery(function($){
     }
 
     $('body').on('click', '#gallery-wrapper .canvas-list', function (e) {
-
-        
-
         $("#name").val("");
         $(".canvas-list").removeClass("selected");
         $(this).addClass("selected");
@@ -97,13 +93,13 @@ jQuery(function($){
     });
 
     $(".delete-btn").click(function(){
-        $( ".gallery-canvas-text" ).each(function() {
-            //console.log($(this).attr('id'));
-            var canvas = document.getElementById($(this).attr('id'));
+        $( ".canvas-list" ).each(function() {
+            var canvas =  document.getElementById($(this).find(".gallery-canvas").attr('id'));
             var ctx = canvas.getContext("2d");
             ctx.clearRect(0, 0, canvas.width, canvas.height);
+            $(this).remove();
         });
-        
+        imagesPreview(document.getElementById("imageLoader"));
     });
 
     function handleImage(e) {

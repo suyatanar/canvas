@@ -83,7 +83,7 @@ canvas.show {
   position: relative;
 }
 .gallery-wrapper .canvas-list{
-  /*width: 33.3%;*/
+  width: 33.3%;
   padding: 10px;
   position: relative;
 }
