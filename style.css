@@ -15,31 +15,9 @@ body {
 .controls{
   max-width: 1000px;
   margin: 0 auto;
-}
-.controls__input {
-  display: block;
-  margin: 0 auto;
-  background: none;
-  border: none;
-  font-size: 1em;
-  padding-bottom: 0.5em;
-  border-bottom: 2px solid #ccc;
-  text-align: center;
-  outline: none;
-  color: #fff;
-  width: 100%;
-}
-.controls__btn {
-  background: dodgerblue;
-  color: #fff;
-  border: none;
-  font-size: 1em;
-}
-.controls__label {
-  display: block;
-  font-size: 0.8em;
-  padding-top: 0.3em;
-  margin-bottom: 2em;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
 }
 input[type="file"] {
   display: none;
@@ -47,18 +25,22 @@ input[type="file"] {
 .custom-file-upload {
   border: 1px solid #ccc;
   display: inline-block;
-  padding: 6px 12px;
+  padding: 15px 20px;
   cursor: pointer;
+  margin-bottom: 20px;
 }
 
 .input-text, #input-text-wrapper{
   z-index: 222;
+  background: transparent;
+  border: none;
+  outline: none;
 }
-
-/*canvas {
-  background-color: #eee;
-  transition: opacity 0.3s;
-}*/
+.input-text{
+  border-bottom: 2px solid #fff;
+  color: #ffec04;
+  font-size: 15px;
+}
 canvas.show {
   opacity: 1;
 }
@@ -83,6 +65,10 @@ canvas.show {
   position: relative;
   display: none;
 }
+.gallery-wrapper .canvas-list p{
+  text-transform: uppercase;
+  font-size: 20px;
+}
 .gallery-wrapper .canvas-list.selected{
   display: block;
 }
@@ -105,4 +91,38 @@ canvas.show {
 .pagination-list #back-btn, .pagination-list #next-btn{
   padding: 10px;
   cursor: pointer;
+  color: #ffd358;
+  text-decoration: underline;
+}
+.images-list {
+  margin: 20px 0;
+  padding-top: 20px;
+  border-top: 1px solid #fff;
+  text-align: left;
+  width: 100%;
+}
+.images-list .image-name {
+  margin: 5px 0;
+}
+button {
+  background: #ff5454;
+  border: none;
+  padding: 5px 10px;
+  margin-left: 10px;
+  color: #fff;
+  cursor: pointer;
+}
+.clear-all-tag {
+  padding: 15px 20px;
+  display: inline-block;
+  margin-bottom: 20px;
+}
+.delete-all {
+  margin-bottom: 20px;
+}
+
+@media (max-width: 767px){
+  h1{
+    font-size: 20px;
+  }
 }

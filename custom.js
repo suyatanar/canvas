@@ -89,10 +89,10 @@ jQuery(function($){
         ctx.fillText(text_title, x, y);
     }
 
-    $('body').on('click', '#gallery-wrapper .canvas-list', function (e) {
+    $('body').on('click', '#gallery-wrapper .canvas-list canvas', function (e) {
         $("#name").val("");
         $(".canvas-list").removeClass("selected");
-        $(this).addClass("selected");
+        $(this).parent('.canvas-list').addClass("selected");
 
         var offset = $(this).offset();
         canvas_x = e.pageX - offset.left;
@@ -106,6 +106,7 @@ jQuery(function($){
         el.css("left", x);
         el.css("top", y);
 
+        $("#name").focus();
         $( "#name" ).keyup(function() {
             clearTimeout(timer); 
             timer = setTimeout(hideTextBox, 1000);
@@ -168,6 +169,13 @@ jQuery(function($){
             $(".canvas-list").addClass("selected");
         }
 
+    });
+
+    $(".delete-all").click(function(){
+        resetCanvas();
+        clearAlltag();
+        $(".pagination-list").empty();
+        file.splice(0);
     });
 
     function paginationList(file){
