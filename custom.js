@@ -8,12 +8,14 @@ jQuery(function($){
     var file = [];
     var timer = null;
     var filesAmount = 0;
+    var page = 1;
 
     $('#imageLoader').on('change', function(e) { 
         $(".canvas-list").remove();  
         $(".images-list .image-name").each(function(){
             $(this).remove();
         }); 
+        page = 1;
         current_file = e.target.files;
         file = Array.from(file).concat(Array.from(current_file));
         imagesPreview(file);
@@ -28,15 +30,7 @@ jQuery(function($){
         if (file) {
             //for(let x in file){
 
-                filesAmount = file.length;
-
-                $(".pagination-list").empty();
-                if(filesAmount > 1){
-                    next = '<span id="next-btn">Next</span>';                    
-                }
-
-                pagination = back + '1 of ' + filesAmount + next;
-                $(".pagination-list").append(pagination);
+                paginationList(file);
 
                 for (i = 0; i < filesAmount; i++) {
 
@@ -60,12 +54,10 @@ jQuery(function($){
                             var current_img = e.currentTarget;
 
                             if(j == 0){
-                                $('#gallery-wrapper').append('<div class="canvas-list selected" id="image-'+j+'"><canvas id="gallery-canvas-' + j +'" class="gallery-canvas"></canvas></div>');
+                                $('#gallery-wrapper').append('<div class="canvas-list selected" id="image-'+j+'"><canvas id="gallery-canvas-' + j +'" class="gallery-canvas"></canvas><p>'+file[j].name.replace(/\.[^/.]+$/, "")+'</p></div>');
                             }else{
-                                $('#gallery-wrapper').append('<div class="canvas-list" id="image-'+j+'"><canvas id="gallery-canvas-' + j +'" class="gallery-canvas"></canvas></div>');
+                                $('#gallery-wrapper').append('<div class="canvas-list" id="image-'+j+'"><canvas id="gallery-canvas-' + j +'" class="gallery-canvas"></canvas><p>'+file[j].name.replace(/\.[^/.]+$/, "")+'</p></div>');
                             }
-
-                            
 
                             var canvas = document.getElementById("gallery-canvas-" + j);
                             var ctx = canvas.getContext("2d");
@@ -125,20 +117,19 @@ jQuery(function($){
         var current_img = $(".canvas-list.selected").attr("id");
         $(".canvas-list").removeClass("selected");
         $(".canvas-list#" + current_img).next().addClass("selected");
-
+        page++;
         $(".pagination-list").empty();
-        var next_img = $(".canvas-list#" + current_img).next().attr('id');
-        next_img = parseInt(next_img.replace("image-", "")) + 1;
 
+        filesAmount = file.length;
         if(filesAmount > 1){
             back = '<span id="back-btn">Back</span>';                              
         }
         next = '<span id="next-btn">Next</span>';  
-        if(next_img == (filesAmount)){
+        if(page == (filesAmount)){
             next = '';  
         }
 
-        pagination = back + next_img + ' of ' + filesAmount + next;
+        pagination = back + page + ' of ' + filesAmount + next;
         $(".pagination-list").append(pagination);
     });
 
@@ -146,20 +137,19 @@ jQuery(function($){
         var current_img = $(".canvas-list.selected").attr("id");
         $(".canvas-list").removeClass("selected");
         $(".canvas-list#" + current_img).prev().addClass("selected");
-
+        page--;
         $(".pagination-list").empty();
-        var prev_img = $(".canvas-list#" + current_img).prev().attr('id');
-        prev_img = parseInt(prev_img.replace("image-", "")) + 1;
 
+        filesAmount = file.length;
         if(filesAmount > 1){
             next = '<span id="next-btn">Next</span>';                                      
         }
         back = '<span id="back-btn">Back</span>';      
-        if(prev_img == 1){
+        if(page == 1){
             back = '';  
         }
 
-        pagination = back + prev_img + ' of ' + filesAmount + next;
+        pagination = back + page + ' of ' + filesAmount + next;
         $(".pagination-list").append(pagination);
     });
 
@@ -172,8 +162,30 @@ jQuery(function($){
         $(this).parent('.image-name').remove();
         $(".canvas-list#image-" + canvas_id).remove();
 
-        delete file[canvas_id];
+        file.splice(canvas_id, 1);
+        paginationList(file);
+        if(file.length == 1){
+            $(".canvas-list").addClass("selected");
+        }
+
     });
+
+    function paginationList(file){
+        filesAmount = file.length;
+
+        $(".pagination-list").empty();
+
+        next = '';
+        back = '';
+        if(filesAmount > 1){
+            next = '<span id="next-btn">Next</span>';                    
+        }
+
+        pagination = back + '1 of ' + filesAmount + next;
+        $(".pagination-list").append(pagination);
+        $(".canvas-list").removeClass("selected");
+        $(".canvas-list:first-child").addClass("selected");
+    }
 
     function resetCanvas(){
         $( ".canvas-list" ).each(function() {
@@ -207,7 +219,6 @@ jQuery(function($){
                 canvas.height = img.height;
                 ctx.drawImage(img,0,0);
             }
-			//ctx.drawImage(img, 10, 10);
         };
         reader.readAsDataURL(e.target.files[0]);
     	

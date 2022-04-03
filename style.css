@@ -72,10 +72,6 @@ canvas.show {
   z-index: 9999;
 }
 
-.selected {
-  border: 3px solid #30a730;
-}
-
 .gallery-wrapper{
   display: flex;
   flex-wrap: wrap;
@@ -84,12 +80,14 @@ canvas.show {
 }
 .gallery-wrapper .canvas-list{
   width: 100%;
-  padding: 10px;
   position: relative;
   display: none;
 }
 .gallery-wrapper .canvas-list.selected{
   display: block;
+}
+.gallery-wrapper .canvas-list.selected canvas{
+  border: 3px solid #30a730;
 }
 .gallery-wrapper .canvas-list .gallery-canvas {
   width: 100%;
